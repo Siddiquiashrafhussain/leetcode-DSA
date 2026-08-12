@@ -45,39 +45,67 @@
 
 
 class Solution {
+    /**
+     * Sliding-window solution that maintains counts of elements inside the window
+     * using a custom open-addressing hash table implemented with parallel arrays:
+     * - keys: stored element values
+     * - vals: counts (frequencies) of the corresponding keys
+     * - used: whether a slot has been occupied
+     *
+     * The window is expanded by moving `right` forward and incrementing the
+     * frequency of nums[right]. If that element's frequency exceeds `k`, we
+     * advance `left` (shrinking the window) and decrement frequencies until
+     * the violating element's count is <= k again. We track the maximum
+     * window length seen.
+     *
+     * Time complexity: O(n) expected, since each element enters and leaves
+     * the window at most once and hash lookups are O(1) average.
+     * Space complexity: O(m) where m is a power-of-two sized table (~4n).
+     */
     public int maxSubarrayLength(int[] nums, int k) {
         int n = nums.length;
 
+        // Choose table size as power of two >= 4 * n to reduce collisions.
         int size = 1;
         while (size < n * 4) size <<= 1;
 
+        // Parallel arrays implementing a simple open-addressing hash map:
+        // keys[i] stores the key (value), vals[i] stores its frequency,
+        // used[i] marks whether slot i has ever been initialized.
         int[] keys = new int[size];
         int[] vals = new int[size];
         boolean[] used = new boolean[size];
-        int mask = size - 1;
+        int mask = size - 1; // for fast modulo when table size is power of two
 
-        int left = 0;
-        int ans = 0;
+        int left = 0; // left index of the sliding window
+        int ans = 0;   // best (maximum) window length found
 
         for (int right = 0; right < n; right++) {
             int x = nums[right];
-            int idx = hash(x) & mask;
 
+            // Find slot for x using linear probing
+            int idx = hash(x) & mask;
             while (used[idx] && keys[idx] != x) {
                 idx = (idx + 1) & mask;
             }
 
+            // If empty slot, initialize with the key
             if (!used[idx]) {
                 used[idx] = true;
                 keys[idx] = x;
             }
 
+            // Increment frequency of x (inside current window)
             vals[idx]++;
 
+            // If frequency of x now exceeds k, move left forward until
+            // the frequency of that same value is <= k again. Each time
+            // we move left we decrement the count of the outgoing value.
             while (vals[idx] > k) {
                 int y = nums[left++];
                 int j = hash(y) & mask;
 
+                // Locate slot for the outgoing value y (must exist)
                 while (keys[j] != y) {
                     j = (j + 1) & mask;
                 }
@@ -85,6 +113,7 @@ class Solution {
                 vals[j]--;
             }
 
+            // Update answer with current window length
             int len = right - left + 1;
             if (len > ans) ans = len;
         }
@@ -93,6 +122,10 @@ class Solution {
     }
 
     private int hash(int x) {
+        // A small integer mixing/hash function to distribute 32-bit keys
+        // across the table. It uses xor shifts and multiplications by
+        // large odd constants to produce well-distributed bits for the
+        // open-addressing hash table above.
         x ^= x >>> 16;
         x *= 0x7feb352d;
         x ^= x >>> 15;

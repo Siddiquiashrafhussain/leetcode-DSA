@@ -1,0 +1,186 @@
+/* 
+3116. Kth Smallest Amount With Single Denomination Combination
+Solved
+Hard
+Topics
+premium lock icon
+Companies
+Hint
+You are given an integer array coins representing coins of different denominations and an integer k.
+
+You have an infinite number of coins of each denomination. However, you are not allowed to combine coins of different denominations.
+
+Return the kth smallest amount that can be made using these coins.
+
+ 
+
+Example 1:
+
+Input: coins = [3,6,9], k = 3
+
+Output: 9
+
+Explanation: The given coins can make the following amounts:
+Coin 3 produces multiples of 3: 3, 6, 9, 12, 15, etc.
+Coin 6 produces multiples of 6: 6, 12, 18, 24, etc.
+Coin 9 produces multiples of 9: 9, 18, 27, 36, etc.
+All of the coins combined produce: 3, 6, 9, 12, 15, etc.
+
+Example 2:
+
+Input: coins = [5,2], k = 7
+
+Output: 12
+
+Explanation: The given coins can make the following amounts:
+Coin 5 produces multiples of 5: 5, 10, 15, 20, etc.
+Coin 2 produces multiples of 2: 2, 4, 6, 8, 10, 12, etc.
+All of the coins combined produce: 2, 4, 5, 6, 8, 10, 12, 14, 15, etc.
+
+ 
+
+Constraints:
+
+1 <= coins.length <= 15
+1 <= coins[i] <= 25
+1 <= k <= 2 * 10^9
+coins contains pairwise distinct integers.
+*/
+
+import java.util.*;
+
+class Solution {
+
+    public long findKthSmallest(int[] coins, int k) {
+
+        // ------------------------------------------------------------
+        // STEP 1: Sort coins and remove redundant denominations.
+        //
+        // If coin % smallerCoin == 0, every multiple of coin
+        // is already covered by smallerCoin.
+        // ------------------------------------------------------------
+
+        Arrays.sort(coins);
+
+        int n = 0;
+
+        for (int coin : coins) {
+
+            boolean redundant = false;
+
+            for (int i = 0; i < n; i++) {
+                if (coin % coins[i] == 0) {
+                    redundant = true;
+                    break;
+                }
+            }
+
+            if (!redundant) {
+                coins[n++] = coin;
+            }
+        }
+
+        // ------------------------------------------------------------
+        // STEP 2: Precompute LCM for every subset.
+        //
+        // subset = 1, 2, 3, ...
+        // lcm[mask] = LCM of all coins represented by mask.
+        //
+        // We only care about LCM <= upper.
+        // ------------------------------------------------------------
+
+        int totalMasks = 1 << n;
+
+        long upper = (long) coins[0] * k;
+
+        long[] lcm = new long[totalMasks];
+        boolean[] add = new boolean[totalMasks];
+
+        lcm[0] = 1;
+
+        for (int mask = 1; mask < totalMasks; mask++) {
+
+            int bit = mask & -mask;
+            int index = Integer.numberOfTrailingZeros(bit);
+            int prev = mask ^ bit;
+
+            long g = gcd(lcm[prev], coins[index]);
+            long value = lcm[prev] / g;
+
+            // Prevent overflow.
+            if (value > upper / coins[index]) {
+                lcm[mask] = upper + 1;
+            } else {
+                lcm[mask] = value * coins[index];
+            }
+
+            // Odd subset size => add, even subset size => subtract.
+            add[mask] = !add[prev];
+        }
+
+        // ------------------------------------------------------------
+        // STEP 3: Binary search the smallest amount whose
+        // number of valid values is >= k.
+        // ------------------------------------------------------------
+
+        long left = coins[0];
+        long right = upper;
+
+        while (left < right) {
+
+            long mid = left + ((right - left) >>> 1);
+
+            if (count(mid, lcm, add) >= k) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return left;
+    }
+
+    // ------------------------------------------------------------
+    // Count distinct numbers <= x that are divisible by
+    // at least one denomination.
+    //
+    // Inclusion-Exclusion:
+    // odd subset size  -> +
+    // even subset size -> -
+    // ------------------------------------------------------------
+
+    private long count(long x, long[] lcm, boolean[] add) {
+
+        long result = 0;
+
+        for (int mask = 1; mask < lcm.length; mask++) {
+
+            long d = lcm[mask];
+
+            if (d > x) {
+                continue;
+            }
+
+            long multiples = x / d;
+
+            if (add[mask]) {
+                result += multiples;
+            } else {
+                result -= multiples;
+            }
+        }
+
+        return result;
+    }
+
+    private long gcd(long a, long b) {
+
+        while (b != 0) {
+            long temp = a % b;
+            a = b;
+            b = temp;
+        }
+
+        return a;
+    }
+}

@@ -37,7 +37,7 @@
 // 1 <= n <= 105
 
 
-class Solution {
+class StoneGameIV {
     public boolean winnerSquareGame(int n) {
         // dp[i] means whether the current player can force a win when there are i stones left.
         boolean[] dp = new boolean[n + 1];

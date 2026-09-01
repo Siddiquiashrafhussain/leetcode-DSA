@@ -1,7 +1,7 @@
 /// 2904. Shortest and Lexicographically Smallest Beautiful String
 
 
-class Solution {
+class ShortestAndLexicographicallySmallestBeautifulString {
     public String shortestBeautifulSubstring(String s, int k) {
 
         int n = s.length();

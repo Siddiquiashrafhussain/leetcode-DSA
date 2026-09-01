@@ -1,13 +1,20 @@
-# Compiled Java classes
+# Compiled Java files
 *.class
 
-# IDE and editor files
+# IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
+*.iml
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
+
+# Build artifacts
+bin/
+build/
+dist/
+
+# Temporary files
+*.tmp
+*.log

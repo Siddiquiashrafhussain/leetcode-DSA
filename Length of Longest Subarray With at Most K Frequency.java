@@ -44,7 +44,7 @@
 // 1 <= k <= nums.length
 
 
-class Solution {
+class LengthOfLongestSubarrayWithAtMostKFrequency {
     /**
      * Sliding-window solution that maintains counts of elements inside the window
      * using a custom open-addressing hash table implemented with parallel arrays:

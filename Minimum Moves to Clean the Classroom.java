@@ -1,6 +1,6 @@
 // 3568. Minimum Moves to Clean the Classroom
 
-class Solution {
+class MinimumMovesToCleanTheClassroom {
 
     public int minMoves(String[] classroom, int energy) {
 

@@ -39,7 +39,7 @@ Constraints:
 
 
 
-class Solution {
+class StoneGameV {
     /**
      * Stone Game V - Dynamic Programming Solution
      * 

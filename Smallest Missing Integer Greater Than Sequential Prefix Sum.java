@@ -28,7 +28,7 @@
 
 // 1 <= nums.length <= 50
 // 1 <= nums[i] <= 50
-class Solution {
+class SmallestMissingIntegerGreaterThanSequentialPrefixSum {
     /**
      * Return the smallest integer x missing from nums such that
      * x is greater than or equal to the sum of the longest sequential prefix.

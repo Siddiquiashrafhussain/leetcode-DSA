@@ -40,7 +40,7 @@
 
 
 
-class Solution {
+class LongestSubsequenceWithNonZeroBitwiseXOR {
     public int longestSubsequence(int[] nums) {
         // XOR of the entire array.
         int xor = 0;

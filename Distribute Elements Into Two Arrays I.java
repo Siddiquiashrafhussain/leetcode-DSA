@@ -45,7 +45,7 @@ import java.util.ArrayList;
 // All elements in nums are distinct.
 
 
-class Solution {
+class DistributeElementsIntoTwoArraysI {
     public int[] resultArray(int[] nums) {
         // The first element always goes to arr1 and the second element goes to arr2.
         ArrayList<Integer> arr1 = new ArrayList<>();

@@ -40,7 +40,7 @@
 // Constraints:
 // 1 <= n <= 10^6
 
-class Solution {
+class CheckDivisibilityByDigitSumAndProduct {
     public boolean checkDivisibility(int n) {
 
         // Keep a copy of n because we will modify num

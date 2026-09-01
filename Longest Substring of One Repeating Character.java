@@ -43,7 +43,7 @@
 // 0 <= queryIndices[i] < s.length
 
 
-class Solution {
+class LongestSubstringOfOneRepeatingCharacter {
 
     /**
      * Segment Tree data structure to efficiently track the longest substring of repeating characters.

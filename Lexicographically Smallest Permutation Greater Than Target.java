@@ -1,6 +1,6 @@
 //3720. Lexicographically Smallest Permutation Greater Than Target
 
-class Solution {
+class LexicographicallySmallestPermutationGreaterThanTarget {
 
     public String lexGreaterPermutation(String s, String target) {
 

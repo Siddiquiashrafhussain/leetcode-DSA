@@ -1,5 +1,5 @@
 //3734. Lexicographically Smallest Palindromic Permutation Greater Than Target
-class Solution {
+class LexicographicallySmallesPalindromicPermutationGreaterThanTarget {
 
     public String lexPalindromicPermutation(String s, String target) {
 

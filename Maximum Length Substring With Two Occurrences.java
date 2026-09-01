@@ -35,7 +35,7 @@
 
 
 
-class Solution {
+class MaximumLengthSubstringWithTwoOccurrences {
     public int maximumLengthSubstring(String s) {
         // freq[i] stores how many times character i appears in the current window
         int[] freq = new int[26];

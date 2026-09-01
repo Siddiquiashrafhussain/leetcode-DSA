@@ -63,7 +63,7 @@
 // 1 <= k <= nums.length
 
 
-class Solution {
+class FindTheLargestAlmostMissingInteger {
     public int largestInteger(int[] nums, int k) {
         int n = nums.length;
 

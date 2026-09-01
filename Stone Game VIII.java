@@ -1,5 +1,5 @@
 ////================= LeetCode 1872 — Stone Game VIII ==================////
-class Solution {
+class StoneGameVIII {
     public int stoneGameVIII(int[] stones) {
 
         int n = stones.length;
